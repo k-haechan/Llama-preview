@@ -1,0 +1,29 @@
+name: 🛡️ PR Code Review with LlamaPReview
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run LlamaPReview for Code Review
+        uses: llamapreview/llamapreview@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          mode: code-review
+          language: java
+          comment_language: ko
+          review_criteria: |
+            - 🐛 버그: Java Spring 코드에서 잠재적 오류를 찾습니다.
+            - 🚀 성능: 비효율적 패턴(예: 쿼리, 루프)을 식별합니다.
+            - ✨ 가독성: 변수명, 구조, 주석 개선을 제안합니다.
+            - 🔒 보안: SQL Injection, 하드코딩된 비밀번호 등을 검토합니다.
